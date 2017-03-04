@@ -1,0 +1,34 @@
+#!/bin/bash
+
+expected_AvailabilityZones="us-east-1b,us-east-1a,us-east-1c,us-east-1d,us-east-1e"
+expected_AwsRegion="us-east-1"
+expected_Internal="No"
+expected_Name="rack-stack"
+expected_Private="Yes"
+expected_Release="20170301205054"
+expected_StackId="arn:aws:cloudformation:us-east-1:332653055745:stack/rack-stack/6eb6bed0-0085-11e7-a1c8-50d5ca63268e"
+
+params="
+    AvailabilityZones
+    AwsRegion
+    Internal
+    Name
+    Private
+    Release
+    StackId
+"
+
+for param in $params; do
+    expected_var=expected_${param}
+    expected_result=$(eval echo "\$$expected_var")
+
+    cf_result=$(terraform output $param)
+
+    if [ "$expected_result" = "$cf_result" ] ; then
+        echo "[ OK ] $param: $cf_result"
+    else
+        echo "[ NOK] $param: $expected_result != $cf_result"
+    fi
+
+
+done
