@@ -10,7 +10,13 @@
 - Import the Rack into Convox
 
 
-## Install missing packages?
+## Testing
+
+`make test`
+
+## Convox provider plugin
+
+### Install missing packages?
 
 ```
 $ go get github.com/hashicorp/errwrap
