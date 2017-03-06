@@ -2,3 +2,4 @@ debug.tmp
 terraform.tfplan
 terraform.tfstate
 *.backup
+variables.tf
