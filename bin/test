@@ -1,5 +1,16 @@
 #!/bin/bash
 
+ok() {
+    echo "`tput rev``tput setaf 2`[✓]`tput sgr0` $@"
+}
+
+nok() {
+    echo "`tput rev``tput setaf 1`[X]`tput sgr0` $@"
+}
+
+bold() {
+    echo "`tput bold`$@`tput sgr0`"
+}
 expected_AvailabilityZones="us-east-1b,us-east-1a,us-east-1c,us-east-1d,us-east-1e"
 expected_AwsRegion="us-east-1"
 expected_Internal="No"
@@ -7,6 +18,7 @@ expected_Name="rack-stack"
 expected_Private="Yes"
 expected_Release="20170301205054"
 expected_StackId="arn:aws:cloudformation:us-east-1:332653055745:stack/rack-stack/6eb6bed0-0085-11e7-a1c8-50d5ca63268e"
+expected_tags="Name = tfadventures"
 
 params="
     AvailabilityZones
@@ -16,6 +28,7 @@ params="
     Private
     Release
     StackId
+    tags
 "
 
 for param in $params; do
@@ -25,10 +38,11 @@ for param in $params; do
     cf_result=$(terraform output $param)
 
     if [ "$expected_result" = "$cf_result" ] ; then
-        echo "[ OK ] $param: $cf_result"
+        ok "$(bold $param): $cf_result"
     else
-        echo "[ NOK] $param: $expected_result != $cf_result"
+        msg="`tput bold`$param`tput sgr0`:
+               $expected_result (expected)
+            != $cf_result (actual)"
+        nok "$msg"
     fi
-
-
 done
